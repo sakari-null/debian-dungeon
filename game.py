@@ -1,18 +1,30 @@
 import random
 
+def read_high_score():
+    record_name = None
+    record_hp = -1
+
+    try:
+        with open("highscore.txt", "r") as file:
+            current_record = file.read().strip()
+            parts = current_record.split()
+            record_name = parts[0].rstrip(":")
+            record_hp = int(parts[1])
+    except FileNotFoundError:
+        pass
+
+    return record_name, record_hp
+
+
 def start_game():
 
     while True:
         print("\n---- Welcome to the Debian Dungeon ----")
-        record_hp = -1
-    
-        try:
-            with open("highscore.txt", "r") as file:
-                current_record = file.read().strip()
-                parts = current_record.split()
-                record_hp = int(parts[1])
-                print(f"Current Record Holder -> {current_record}")
-        except FileNotFoundError:
+        record_name, record_hp = read_high_score()
+
+        if record_name is not None:
+            print(f"Current Record Holder -> {record_name}: {record_hp} HP")
+        else:
             print("Current Record Holder -> No scores recorded yet! Be the first.")
             print("---------------------------------")
 
