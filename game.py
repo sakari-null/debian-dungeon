@@ -4,10 +4,13 @@ def start_game():
 
     while True:
         print("\n---- Welcome to the Debian Dungeon ----")
+        record_hp = -1
     
         try:
             with open("highscore.txt", "r") as file:
                 current_record = file.read().strip()
+                parts = current_record.split()
+                record_hp = int(parts[1])
                 print(f"Current Record Holder -> {current_record}")
         except FileNotFoundError:
             print("Current Record Holder -> No scores recorded yet! Be the first.")
@@ -44,9 +47,12 @@ def start_game():
             choice2 = input("Use your torch to open the chest? (yes/no):").lower()
             if choice2 == "yes" and "health_potion" in inventory:
                 print("\nYou safely open chest, drink your health potion, and find the golden Debian source code! YOU WIN!")
-                print(f"Saving your high score of {health} HP...")
-                with open("highscore.txt", "w") as file:
-                    file.write(f"{player_name}: {health} HP")
+                if health > record_hp:
+                    print(f"Saving your high score of {health} HP...")
+                    with open("highscore.txt", "w") as file:
+                        file.write(f"{player_name}: {health} HP")
+                else:
+                    print("You won, but the old high score remains!")
             elif choice2 == "yes":
                 print("\nYou open the chest but it's a trap! Exploded. Game over!.")
             else:
